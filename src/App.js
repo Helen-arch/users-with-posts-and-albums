@@ -1,10 +1,10 @@
 import './App.css';
-import { UserPosts } from './components/UserPosts';
+import { Outlet } from 'react-router-dom';
 
 function App() {
   return (
     <div className="section py-5">
-    <UserPosts userId={11} />
+    <Outlet />
   </div>
   );
 }
