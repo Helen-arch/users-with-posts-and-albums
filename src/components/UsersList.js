@@ -10,6 +10,8 @@ export const UsersList = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query') || '';
+  const sortBy = searchParams.get('sort') || '';
+  const orderBy = searchParams.get('order') || '';
 
   const loadUsers = async () => {
     try {
@@ -18,13 +20,13 @@ export const UsersList = () => {
       setUsers(data);
     } catch (error) {
       throw new Error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     loadUsers();
-
-    setLoading(false);
   }, []);
 
   const handleQueryChange = (event) => {
@@ -39,33 +41,52 @@ export const UsersList = () => {
     setSearchParams(params);
   };
 
+  const header = 'name';
+  const firstClick = sortBy !== header;
+  const secondClick = sortBy === header && orderBy === 'asc';
+  const thirdClick = sortBy === header && orderBy === 'desc';
+  let sort = null;
+  let order = null;
+
+  if (firstClick) {
+    sort = header;
+    order = 'asc';
+  }
+
+  if (secondClick) {
+    sort = header;
+    order = 'desc';
+  }
+
+  if (thirdClick) {
+    sort = null;
+    order = null;
+  }
+
+  const handleSortChange = () => {
+    const params = new URLSearchParams(searchParams);
+
+    if (order) {
+      params.set('order', order);
+    } else {
+      params.delete('order');
+    }
+
+    if (sort) {
+      params.set('sort', sort);
+    } else {
+      params.delete('sort');
+    }
+
+    setSearchParams(params);
+  };
+
   const visibleUsers = getVisibleUsers({
     users,
     query,
-    // sortBy,
-    // isReversed,
+    sortBy,
+    orderBy,
   });
-
-  // const firstClick = sortBy !== header;
-  // const secondClick = sortBy === header && !isReversed;
-  // const thirdClick = sortBy === header && !!isReversed;
-  // let sort = null;
-  // let order = null;
-
-  // if (firstClick) {
-  //   sort = header.toLowerCase();
-  //   order = null;
-  // }
-
-  // if (secondClick) {
-  //   sort = header.toLowerCase();
-  //   order = 'desc';
-  // }
-
-  // if (thirdClick) {
-  //   sort = null;
-  //   order = null;
-  // }
 
   return (
     <div className="box">
@@ -101,12 +122,16 @@ export const UsersList = () => {
               <th>
                 Name
 
-                <span className="icon">
+                <span
+                  className="icon"
+                  role="button"
+                  onClick={handleSortChange}
+                >
                   <i
                     className={classNames('fas', {
-                      'fa-sort': true,
-                      // 'fa-sort-up': secondClick,
-                      // 'fa-sort-down': thirdClick,
+                      'fa-sort': firstClick,
+                      'fa-sort-up': secondClick,
+                      'fa-sort-down': thirdClick,
                     })}
                   />
                 </span>
@@ -133,7 +158,7 @@ export const UsersList = () => {
                 </td>
                 <td>
                   <Link
-                    to={`albums/${user.id}`}
+                    to={`albums/${user.id}/album`}
                     className="icon button is-success is-inverted"
                   >
                     <i className="fa-regular fa-images" />

@@ -1,8 +1,8 @@
 export const getVisibleUsers = ({
   users,
   query,
-  sortBy = 'name',
-  isReversed = false,
+  sortBy,
+  orderBy,
 }) => {
   let visibleUsers = [...users];
 
@@ -17,7 +17,7 @@ export const getVisibleUsers = ({
   if (sortBy) {
     visibleUsers.sort((a, b) => a.name.localeCompare(b.name));
 
-    if (isReversed) {
+    if (orderBy === 'desc') {
       visibleUsers.reverse();
     }
   }

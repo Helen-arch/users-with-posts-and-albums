@@ -11,8 +11,6 @@ export const UserPosts = () => {
 
   useEffect(() => {
     loadPosts();
-    
-    setLoading(false);
   }, [userId]);
 
   const loadPosts = async () => {
@@ -22,6 +20,8 @@ export const UserPosts = () => {
       setPosts(data);
     } catch (error) {
       throw new Error(error);
+    } finally {
+      setLoading(false);
     }
   };
 

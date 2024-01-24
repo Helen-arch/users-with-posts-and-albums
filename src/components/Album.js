@@ -16,13 +16,13 @@ export const Album = () => {
       setPhotos(data);
     } catch (error) {
       throw new Error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     loadUsers();
-
-    setLoading(false);
   }, [albumId]);
 
   return (
@@ -32,11 +32,16 @@ export const Album = () => {
       {loading && <Loader />}
 
       {!loading && (
-        <div className="is-flex">
+        <div className="content is-flex is-flex-wrap-wrap is-justify-content-space-evenly is-align-items-center">
           {photos.map(photo => (
-            <div key={photo.id}>
-              <img src={photo.src} alt='photo' />
-              <h6>{photo.title}</h6>
+            <div key={photo.id} className="box">
+              <img
+                src={photo.url}
+                alt="albumPhoto"
+                className="image"
+              />
+
+              <h6 className="title pt-4">{photo.title}</h6>
             </div>
           ))}
         </div>

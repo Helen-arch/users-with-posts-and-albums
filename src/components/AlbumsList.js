@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Loader } from './Loader';
 import { getUserAlbums } from '../api/albums';
 
-export const AlbumsList = ({
-  selectedUserId,
-  onSelect = () => {},
-}) => {
+export const AlbumsList = () => {
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const { userId } = useParams();
 
   const loadUsers = async () => {
@@ -19,13 +15,13 @@ export const AlbumsList = ({
       setAlbums(data);
     } catch (error) {
       throw new Error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     loadUsers();
-
-    setLoading(false);
   }, [userId]);
 
   return (
@@ -40,7 +36,7 @@ export const AlbumsList = ({
             <tr>
               <th>#</th>
               <th>Title</th>
-              <th> </th>
+              <th>Photos</th>
             </tr>
           </thead>
       
@@ -50,12 +46,12 @@ export const AlbumsList = ({
                 <td>{album.id}</td>
                 <td>{album.title}</td>
                 <td>
-                  <button
-                    onClick={() => navigate(`${album.id}`)}
+                  <Link
+                    to={`../${album.id}`}
                     className="icon button is-success is-inverted"
                   >
                     <i className="far fa-eye" />
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}

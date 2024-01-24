@@ -20,7 +20,7 @@ export const Root = () => (
           <Route path=":userId"element={<UserPosts />}/>
         </Route>
         <Route path="albums">
-          <Route path=":userId" element={<AlbumsList />} />
+          <Route path=":userId/album" element={<AlbumsList />} />
           <Route path=":albumId" element={<Album />} />
         </Route>
       </Route>
