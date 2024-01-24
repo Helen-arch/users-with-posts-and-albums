@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Loader } from './Loader';
 import { getUserAlbums } from '../api/albums';
-
-const userId = 1;
 
 export const AlbumsList = ({
   selectedUserId,
@@ -11,6 +9,8 @@ export const AlbumsList = ({
 }) => {
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { userId } = useParams();
 
   const loadUsers = async () => {
     try {
@@ -30,7 +30,7 @@ export const AlbumsList = ({
 
   return (
     <div className="box">
-      <h2 className="title is-4">Users</h2>
+      <h2 className="title is-4">Albums</h2>
 
       {loading && <Loader />}
       
@@ -50,12 +50,12 @@ export const AlbumsList = ({
                 <td>{album.id}</td>
                 <td>{album.title}</td>
                 <td>
-                  <Link
-                    to={`${album.id}`}
+                  <button
+                    onClick={() => navigate(`${album.id}`)}
                     className="icon button is-success is-inverted"
                   >
                     <i className="far fa-eye" />
-                  </Link>
+                  </button>
                 </td>
               </tr>
             ))}

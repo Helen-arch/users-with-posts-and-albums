@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { PostsList } from './PostsList';
 import { Loader } from './Loader';
 import { getUserPosts } from '../api/posts';
 
-const userId = 1;
-
 export const UserPosts = () => {
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
   const [posts, setPosts] = useState([]);
+  const { userId } = useParams();
 
   useEffect(() => {
     loadPosts();
@@ -30,21 +29,15 @@ export const UserPosts = () => {
     <div className="box">
       <h2 className="title is-4">User posts</h2>
 
-      {!loading && !errorMessage && <>
+      {!loading && <>
         {posts.length > 0 ? (
           <PostsList
             posts={posts}
           />
         ) : (
-          <p>There are no posts yet</p>
+          <Loader />
         )}
       </>}
-
-      {loading && <Loader />}
-
-      {errorMessage && (
-        <p className="notification is-danger">{errorMessage}</p>
-      )}
     </div >
   );
 };
